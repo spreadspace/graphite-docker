@@ -6,7 +6,7 @@ RUN set -x \
     && echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/02no-recommends \
     && apt-get update -q \
     && apt-get upgrade -y -q \
-    && apt-get install -y -q gunicorn3 qgraphite-api \
+    && apt-get install -y -q gunicorn3 graphite-api \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV TINI_VERSION v0.16.1
