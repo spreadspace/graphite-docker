@@ -18,11 +18,6 @@ env:
     - DOCKER_REPO_API=spreadspace/graphite-api
     - DOCKER_REPO_CARBON=spreadspace/graphite-carbon
 
-before_script:
-  ### pull current images to potentially use docker build cache
-  - docker pull $DOCKER_REPO_API:latest
-  - docker pull $DOCKER_REPO_CARBON:latest
-
 script:
   ### build the new images
   - docker build -t $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER .
