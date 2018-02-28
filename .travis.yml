@@ -20,8 +20,8 @@ env:
 
 script:
   ### build the new images
-  - docker build -t $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER .
-  - docker build -t $DOCKER_REPO_CARBON:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER .
+  - docker build -t $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER api
+  - docker build -t $DOCKER_REPO_CARBON:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER carbon
 
 after_success:
   - >-
