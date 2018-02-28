@@ -1,0 +1,45 @@
+---
+sudo: required
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    # DOCKER_EMAIL
+    - secure: "VVwZooopjbR52t+N0Z3W0031QU2v36ESBS2eFv/1RIhJWZLpKp1Nh8mxkXwMq+fPmmV5huDAxLuIjxM/+yVYgoq4ikUSrSUQmn6pntdpfdbTjzlL9G2C5AjTV/fQLAdrCG4tIh7WCQNdrZiVTPjBXq5XSsKMvXTV2GDk2AE1y1oR89WF6Qj4eIY5sOqPUDBIo0t+JXkjjpXs5SjfgmTOhL14JpTG3xz4NLKX6YRcGR5VRSAqY2/NCPt+LRXyNmAGCf1Uk4HS5wiJHD3B4+lcJvDVLGa4JF9QjbzlgReHX/kmNlaA/qS0ESej3uRKTidqLUuioI6mxfZPY1+VLrlGhB7MoRoWh1346OYWHjqTs4inamkYjyWcqpvupTaiau5s6JurjG3sMD+45amiLUaptAAND/VW3kcxo4RpdGEpn9wCPE9n4o+2KKFN7WA4KnAVJ2fQE4piyZnoC1NSu/fPf6qcLpq241B6sKjxFEJG2ZMg3q+DuTA25lcNJHMckmhKmyXKKKflzjGvAdQYpdhf+jJ7bYqFr0qz+mpjpmzo76US6Y48jbes/75ZY+eSpOComNsE+b7tW8C85zWSV/KqjfWO+UbY5Sr569XuRvO2yERsofawE3F29WKPODHfkrovXIlj93qswa3qeMNoHU0lkK26WjGTWOvIqr0/yOxuypI="
+    # DOCKER_USER
+    - secure: "b0DLkxy/u5tPMumbrb4Dm/HnSk5VpvhewQmnOnOZGf8WiHWE9qqE0f3im3iQZnWIpsvndA8PCqG9aK+b/ggVQerDLcJlPpB/suOJkgjxNjI3cH8Upqi64gL2qTWKHGmOqfKpcrqgsJtlMM8rQi2E5g3i35ian1xC2i1xU/Q6KmRrgnxIixy6weAdoOUklGtSVwdBQkO6v4DKhnZCK/huGLpUvIBKdW3Uk8yxEib+VZaOXY4w7hge9oNhxt9mKlkaFWk72OF3Rw0NZuaul+apwKPlXN3DSqCrSWCeI3MOaOPrZvEuSwhRHgS0zS6tKOAdVh06OsiVr3077ls8uT8hcl6liCr0iY5J62FUySycs3UnzPDRJVhJnKO9KI+2DUYQ4zygW445q+vz5SW/GyDu6xsQ8nzrKdC0X/0rVVmTRYI9BBw/dCuJKY1HMaHaiHdukV89JYA/g0lthkINDXoPYDwkZVoTfJoT2VOiDf/rHD8WGU3RJN6Y/Zw2EhSGh3FcKV7y0Ae5/71lti/SH3rHF4mfIGbCkYXiXXULCx6gy0kdpZd4xTfgoIOJyf71yBsGlhPQJBK40+QaSqFUSLX9Eh8JXNBgUJ8dEUgTmsuxd8xbaPXyGnXFTkM08YOgyVOFhdC8PTxeRbOnWXQea4c2TwHf73tW53/sIHbZWrgTn2A="
+    # DOCKER_PASS
+    - secure: "vOb6V6jHBT95Ow00oAunH22U/alaVoD80CdmylKtdib24PugdyQ4fWc5ioUJIhT/W+YZG+yX0vpZu42MqdtEZTNyKyv2x8KQf197DOiO+XPlFzmAQSvPyarQbfVtGXu/R+yP7VB1VPHJZ4GMOSLTUMMV/AZyrTpr3RLdgnFjztoeaEyOc0huw6fjJ1c6XLRADOegY5s//LNIvuP8uB/u8+7YuN/Rt4zTAsOit+1jUmLTz94omHnYPQcdBmiMTp0ZqaYW2haGTtA4BNVdT03k7jrkSSAnkQtpfj6GfwLEaknHhkyaj5lvJycd7ENuM+uioo3CpMY2jJmurM5kreCg0cuiKpvWqrURYqYWf64gGd+wTNS9Q5RJIEVYThNbF9QiR1uSzNpJJcwH/a48VoCjWL1fjsMQOtTClYl0JSfYnyyTt/KEz9CfrFJaJ1s/qorzqztXlyz0c9PPmDG8uuqIDp3O2lOJsTCGJE2MwEVnjTznXy3SlZjF0PXmtygPsqLaqEkD55DkindjVpfyuvJE9gQz2eLT0ZeuOJm+1dA32EcDxn4dFnDbC0Zclt7zEGaozjFdhof7B+jC5N7JxcaF6d089aetgav/SC2ZUMGPJYicWWLoIFT7p0IPco36olRuXaQn8ngMhs4ihJx2FnDO2irEqSRa0DqvOkMlwsl0e4g="
+    - DOCKER_REPO_API=spreadspace/graphite-api
+    - DOCKER_REPO_CARBON=spreadspace/graphite-carbon
+
+before_script:
+  ### pull current images to potentially use docker build cache
+  - docker pull $DOCKER_REPO_API:latest
+  - docker pull $DOCKER_REPO_CARBON:latest
+
+script:
+  ### build the new images
+  - docker build -t $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER .
+  - docker build -t $DOCKER_REPO_CARBON:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER .
+
+after_success:
+  - >-
+    if [ "${TRAVIS_BRANCH}" = master ]; then
+      DOCKER_TAG="latest"
+    else
+      DOCKER_TAG="${TRAVIS_BRANCH}"
+    fi
+  - docker tag $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER $DOCKER_REPO_API:$DOCKER_TAG
+  - docker tag $DOCKER_REPO_CARBON:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER $DOCKER_REPO_CARBON:$DOCKER_TAG
+  ### push to docker-hub
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker push $DOCKER_REPO_API:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
+  - docker push $DOCKER_REPO_API:$DOCKER_TAG
+  - docker push $DOCKER_REPO_CARBON:$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
+  - docker push $DOCKER_REPO_CARBON:$DOCKER_TAG
